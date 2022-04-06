@@ -1,0 +1,21 @@
+html{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+}
+
+a{
+    list-style: none;
+}
+
+.container{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column; /*This way items will be top bottom*/
+    justify-content: center;
+    align-items: center;
+}
+

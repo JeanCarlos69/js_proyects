@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&family=Rubik+Microbe&display=swap');
+
+html{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Rubik Microbe", Cinzel,sans-serif;
+    background-color: whitesmoke;
+}
+
+h1{
+    text-align: center;
+    margin-top: 37px;
+    margin-bottom: 15px;
+    font-size: 35px;
+    letter-spacing: 5px;
+}
+
+/* Loader */
+
+.loader{
+    position: fixed; /* So it doesnt move */
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.loader img{
+    position: fixed;
+    /* center the image */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,50%);
+}
+
+/* Image container */
+
+.image-container {
+    /* margin: top-botto, left-right */
+    margin: 10px 30%; 
+}
+
+.image-container img{
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Media Query: Large phone */
+@media screen and (max-width: 600px) {
+    h1{
+        font-size: 20px;
+    }
+
+    .image-container{
+        margin: 10px;
+    }
+}
