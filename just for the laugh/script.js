@@ -3,11 +3,25 @@ const btn = document.getElementById('btn')
 const post = document.getElementById('source')
 const download = document.getElementById('download')
 const versatile = document.getElementById('versatile')
+const versatile_dark = document.getElementById('NSFW')
+const nsfw = document.getElementById('container-n')
 const category = document.getElementById('ctg')
 
 const checkbox = document.getElementById('n')
 const cache = {}
 
+checkbox.addEventListener('click', ()=>{
+    const result = checkbox.checked
+    if (result) {
+        nsfw.hidden = false
+        versatile.hidden = true
+        versatile.value = ''
+    } else {
+        nsfw.hidden = true
+        versatile.hidden = false
+        versatile_dark.value = ''
+    }
+})
 btn.addEventListener('click', changeBackground)
 //This is the main function
 async function changeBackground(){
@@ -20,7 +34,7 @@ async function changeBackground(){
 
     post.href = bestPhoto?.source
     setAttributes(download, {download: bestPhoto?.file, href: bestPhoto?.url})
-    buttonColor([post,download,btn,versatile,category], bestPhoto.dominant_color) 
+    buttonColor([post,download,btn,versatile,category,versatile_dark], bestPhoto.dominant_color) 
 }
 
 
@@ -74,8 +88,12 @@ function downloader(url) {
 
   function linkToUse(){
       const BASE_URL =  `https://api.waifu.im/random/?is_nsfw=${checkbox.checked}`
+      console.log(versatile_dark.value)
+      console.log('light: ', versatile.value)
       if(versatile.value){
           return BASE_URL + `&selected_tags=${versatile.value}&many=true&full=false`
+      } else if(versatile_dark.value){
+          return BASE_URL + `&selected_tags=${versatile_dark.value}&many=true&full=false`
       }
 
       return `https://api.waifu.im/random/?is_nsfw=${checkbox.checked}&many=true&full=false`
@@ -91,6 +109,14 @@ function downloader(url) {
           setAttributes(option_tag, {value: element})
           option_tag.appendChild(text) 
           versatile.appendChild(option_tag)
+      });
+
+      response.nsfw.forEach(element => {
+          const option_tag = document.createElement('option')
+          const text = document.createTextNode(element.charAt(0).toUpperCase() + element.slice(1)) //first letter uppercase
+          setAttributes(option_tag, {value: element})
+          option_tag.appendChild(text) 
+          versatile_dark.appendChild(option_tag)
       });
   }
 
