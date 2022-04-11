@@ -1,3 +1,77 @@
+const button = document.getElementById('joke_btn')
+const audioElement = document.getElementById('audio')
+const spanish = document.getElementById('spanish')
+const label = document.getElementsByClassName("myButton")
 
-// VoiceRSS Javascript SDK
-const VoiceRSS={speech:function(e){this._validate(e),this._request(e)},_validate:function(e){if(!e)throw"The settings are undefined";if(!e.key)throw"The API key is undefined";if(!e.src)throw"The text is undefined";if(!e.hl)throw"The language is undefined";if(e.c&&"auto"!=e.c.toLowerCase()){var a=!1;switch(e.c.toLowerCase()){case"mp3":a=(new Audio).canPlayType("audio/mpeg").replace("no","");break;case"wav":a=(new Audio).canPlayType("audio/wav").replace("no","");break;case"aac":a=(new Audio).canPlayType("audio/aac").replace("no","");break;case"ogg":a=(new Audio).canPlayType("audio/ogg").replace("no","");break;case"caf":a=(new Audio).canPlayType("audio/x-caf").replace("no","")}if(!a)throw"The browser does not support the audio codec "+e.c}},_request:function(e){var a=this._buildRequest(e),t=this._getXHR();t.onreadystatechange=function(){if(4==t.readyState&&200==t.status){if(0==t.responseText.indexOf("ERROR"))throw t.responseText;audioElement.src=t.responseText,audioElement.play()}},t.open("POST","https://api.voicerss.org/",!0),t.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8"),t.send(a)},_buildRequest:function(e){var a=e.c&&"auto"!=e.c.toLowerCase()?e.c:this._detectCodec();return"key="+(e.key||"")+"&src="+(e.src||"")+"&hl="+(e.hl||"")+"&r="+(e.r||"")+"&c="+(a||"")+"&f="+(e.f||"")+"&ssml="+(e.ssml||"")+"&b64=true"},_detectCodec:function(){var e=new Audio;return e.canPlayType("audio/mpeg").replace("no","")?"mp3":e.canPlayType("audio/wav").replace("no","")?"wav":e.canPlayType("audio/aac").replace("no","")?"aac":e.canPlayType("audio/ogg").replace("no","")?"ogg":e.canPlayType("audio/x-caf").replace("no","")?"caf":""},_getXHR:function(){try{return new XMLHttpRequest}catch(e){}try{return new ActiveXObject("Msxml3.XMLHTTP")}catch(e){}try{return new ActiveXObject("Msxml2.XMLHTTP.6.0")}catch(e){}try{return new ActiveXObject("Msxml2.XMLHTTP.3.0")}catch(e){}try{return new ActiveXObject("Msxml2.XMLHTTP")}catch(e){}try{return new ActiveXObject("Microsoft.XMLHTTP")}catch(e){}throw"The browser does not support HTTP request"}};
+//Disable button
+function toggleButton(){
+    button.disabled = !button.disabled
+}
+
+//Get JOKESapi
+async function getJokes(){
+
+    try {
+        const response = await fetch(jokeLinks())
+        const data = await response.json()
+            console.table(data)
+        if (data.setup){
+           tellJoke(`${data.setup} ... ${data.delivery}`)
+        } else {
+            tellJoke(data.joke)
+        }
+        toggleButton()
+    } catch (error) {
+        console.log('JOKES', error)
+    }
+}
+
+//This will act like a bridge between both API
+//We first get the joke and then pass it to the audio
+function tellJoke(joke){
+   if (spanish.checked) {
+    VoiceRSS.speech({
+        key: 'f8f6e2909ca44766818de1c64939b2e9',
+        src: joke,
+        hl: 'es-es',
+        v: 'Diego',
+        r: 0, 
+        c: 'mp3',
+        f: '44khz_16bit_stereo',
+        ssml: false
+    });
+   } else {
+    VoiceRSS.speech({
+        key: 'f8f6e2909ca44766818de1c64939b2e9',
+        src: joke,
+        hl: 'en-us',
+        v: 'John',
+        r: 0, 
+        c: 'mp3',
+        f: '44khz_16bit_stereo',
+        ssml: false
+    });
+   }
+}
+//Link for the JOKES
+
+function jokeLinks(){
+    if (spanish.checked) {
+        return "https://v2.jokeapi.dev/joke/Any?lang=es"
+    } 
+
+    return "https://v2.jokeapi.dev/joke/Any"
+}
+
+
+button.addEventListener('click', getJokes)
+spanish.addEventListener('click', e =>{
+    if (spanish.checked) {
+        label[0].textContent = "Español ✅"
+        button.textContent = "Dime una broma"
+    } else {
+        label[0].textContent = "Spanish"
+        button.textContent = "Tell me a Joke"
+    }
+})
+audioElement.addEventListener('ended', toggleButton)
