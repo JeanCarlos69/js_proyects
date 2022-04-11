@@ -5,10 +5,10 @@ const download = document.getElementById('download')
 const versatile = document.getElementById('versatile')
 const versatile_dark = document.getElementById('NSFW')
 const nsfw = document.getElementById('container-n')
-const category = document.getElementById('ctg')
 
 const checkbox = document.getElementById('n')
 const cache = {}
+const record_id = []
 
 checkbox.addEventListener('click', ()=>{
     const result = checkbox.checked
@@ -34,7 +34,7 @@ async function changeBackground(){
 
     post.href = bestPhoto?.source
     setAttributes(download, {download: bestPhoto?.file, href: bestPhoto?.url})
-    buttonColor([post,download,btn,versatile,category,versatile_dark], bestPhoto.dominant_color) 
+    buttonColor([post,download,btn,versatile,versatile_dark], bestPhoto.dominant_color) 
 }
 
 
@@ -55,25 +55,19 @@ function setAttributes(el, attrs) {
 
 //Chose an image == || > than the width of the curren device
 function imageProperties(photos){
-   //TODO: default values
-   let defaultValue = {
-    dominant_color: '#f5f5f5'
-   }
+  
     for(let i = 0; i < photos.length;i++){ 
-        _id = photos[i].image_id //Getting the individual tag  
-        if (cache.hasOwnProperty(_id)){
-            //Destructury to get just what we need
-            console.count()
-            return {dominant_color, url, source,file} = cache[_id]
-        }else {
-        //We create the property with the id of the image and use destructuring 
-        //to get just what we'll ned
+        
+        _id = photos[i].image_id 
+        creatingCardImages(_id)
+        //save any new ID
+        if(!record_id.includes(_id)) record_id.push(_id)
+
         cache[_id] = {dominant_color, url, source,file} = photos[i]
         return  cache[_id]
-    }
    }
 
-   return defaultValue
+   return { dominant_color: '#f5f5f5' }
 }
 
 function downloader(url) {
@@ -88,11 +82,12 @@ function downloader(url) {
 
   function linkToUse(){
       const BASE_URL =  `https://api.waifu.im/random/?is_nsfw=${checkbox.checked}`
-      console.log(versatile_dark.value)
-      console.log('light: ', versatile.value)
-      if(versatile.value){
+
+      if(versatile.value != ''){
+          console.log(`value: ${versatile.value}`)
           return BASE_URL + `&selected_tags=${versatile.value}&many=true&full=false`
-      } else if(versatile_dark.value){
+      } else if(versatile_dark.value != ''){
+        console.log(`value: ${versatile_dark.value}`)
           return BASE_URL + `&selected_tags=${versatile_dark.value}&many=true&full=false`
       }
 
@@ -120,4 +115,28 @@ function downloader(url) {
       });
   }
 
-gettingTags()
+gettingTags() 
+
+function creatingCardImages(id){
+    let cacheKeys = Object.keys(cache)
+    
+    //This will prevent repeted images (sometimes)
+    if(record_id.includes(id)) return
+    
+    //Creating cards
+    const div = document.createElement('div')
+    const a = document.createElement('a')
+    const img = document.createElement('img')
+    div.classList.add('card')
+    
+    cacheKeys.forEach(key =>{
+        Object.assign(a,{href: cache[key].url, target: "_blank", alt: cache[key].file})
+        img.src = cache[key].url
+        a.appendChild(img)
+        div.appendChild(a)
+        document.getElementsByClassName('card_container')[0].appendChild(div)
+
+    })
+    
+    for (let member in cache) delete cache[member];
+}

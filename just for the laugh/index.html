@@ -15,19 +15,23 @@
     <a target="_blank" id="source" class="myButton">Source</a>
     <a target="_blank" id="download" class="myButton">Download</a>
     <!-- <p id="text"></p> -->
-    
-    <label for="versatile" id="ctg">Category:</label>
-    <select name="versatile" id="versatile">
-        <option value="">---Random---</option>
-    </select>
+    <div id="gif">
+        <select name="versatile" id="versatile">
+            <option value="">---Category---</option>
+        </select>
+        
+        <div id="container-n" hidden>
+            <select id="NSFW">
+                <option value="" selected>---NSFW---</option>
+            </select>
+        </div>
+    </div>
     <label for="n" style="background-color: #f0ad4e;">NSFW</label>
     <input type="checkbox" id="n" class="check">
-
-    <div id="container-n" hidden>
-        <select id="NSFW">
-            <option value="" selected>---Random---</option>
-        </select>
-    </div>
 </div>
+<!-- Here will go the  history of images -->
+    <div class="card_container">
+        
+    </div>
 </body>
 </html>
