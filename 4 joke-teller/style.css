@@ -16,4 +16,61 @@ body{
   flex-direction: column; /*This way items will be top bottom*/
   justify-content: center;
   align-items: center;
+  background: url('./robot.gif');
+  background-size: contain; /*Fully visible in the screen*/
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+
+button{
+  cursor: pointer;
+  outline: none;
+  width: 200px;
+  height: 50px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+  color: #fff;
+  background-color: #ff3482;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 20px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 5px;
+}
+
+button:hover{
+  filter: brightness(90%);
+}
+
+button:active{
+  transform: scale(0.95);
+}
+
+button:disabled{
+  cursor: default;
+  filter: brightness(30%);
+}
+
+.myButton {
+	background-color:#ff3482;
+	border-radius:28px;
+	
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:4px 18px;
+	text-decoration:none;
+}
+
+
+/* Media query */
+@media screen and (max-width: 1000px) {
+  .container{
+    background-position: center center;
+    background-size: cover;
+  }
+  button{
+    box-shadow: 5px 5px 30px 20px rgba(0, 0, 0, 0.3);
+  }
 }
